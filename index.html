@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Update on Canvases</title>
+    <link rel="stylesheet" type="text/css" href="style.css">   
+   
+</head>
+<body>
+  
+</head>
+<body>
+    <!-- <div class="navbar" id="myNavbar">
+        <a href="#home" class="active">Home</a>
+        <a href="#news">News</a>
+        <a href="#contact">Contact</a>
+        <a href="#about">About</a>
+        <a href="javascript:void(0);" class="icon" onclick="navbarToggle()">
+          &#9776;
+        </a>
+      </div>-->
+
+    <div class="content-section">
+        <h2>More Content Below</h2>
+        <p>BRANDBAJADE.COM is a creative & communication agency established in 2016 in New Delhi, India to create the most compelling designs for brands - 
+            faster and thriving. No; not a Pink Floyd of the rock band, but yes we are here to rock the BRAND. We drum the brand of our partners, which makes 
+            a powerful and productive relationship with their customers in a complex, cluttered and hyper-connected world.</p>
+    </div>
+
+    <div class="image-part-container" id="imagePartContainer">
+    </div> 
+    
+    <img id="sourceImage" src="https://placedog.net/400/400" alt="Source Image" style="display: none;">
+
+    <div class="content-section">
+        <h2>More Content Below</h2>
+        <p>BRANDBAJADE.COM is a creative & communication agency established in 2016 in New Delhi, India to create the most compelling designs for brands - 
+            faster and thriving. No; not a Pink Floyd of the rock band, but yes we are here to rock the BRAND. We drum the brand of our partners, which makes 
+            a powerful and productive relationship with their customers in a complex, cluttered and hyper-connected world.</p>
+    </div>
+
+ 
+    <div class="images-row">   
+        <div id="canvasContainer" class="canvas-grid"></div>
+    </div>
+<script>
+const imageUrls = [
+    "https://placedog.net/400/400?random=1",
+    "https://placedog.net/400/400?random=2",
+    "https://placedog.net/400/400?random=3",
+    "https://placedog.net/400/400?random=4"
+    
+];
+let currentImageUrlIndex = 0;
+
+const texts = ["Music", "Comedy", "Drama", "Action", "Thriller", "Sci-Fi", "Documentary", "Fantasy", "Horror", "Mystery", "Romance", "Western", "Biography", "History", "Sport", "War"];
+const links = [
+    "https://example.com/1", "https://example.com/2", "https://example.com/3", "https://example.com/4",
+    "https://example.com/5", "https://example.com/6", "https://example.com/7", "https://example.com/8",
+    "https://example.com/9", "https://example.com/10", "https://example.com/11", "https://example.com/12",
+    "https://example.com/13", "https://example.com/14", "https://example.com/15", "https://example.com/16"
+];
+// const logos = [
+//         "https://via.placeholder.com/150/0000FF/808080?text=Music",
+//         "https://via.placeholder.com/150/FF0000/FFFFFF?text=Comedy",
+//         "https://via.placeholder.com/150/FFFF00/000000?text=Drama",
+//         "https://via.placeholder.com/150/000000/FFFFFF?text=Action",
+//     // Add more logo URLs here
+// ];
+
+///Not working 
+const faIcons = [
+    "fas fa-music", "fas fa-laugh", "fas fa-theater-masks", "fas fa-fist-raised", "fas fa-ghost",
+    "fas fa-satellite-dish", "fas fa-book-open", "fas fa-dragon", "fas fa-skull-crossbones", "fas fa-search",
+    "fas fa-heart", "fas fa-hat-cowboy", "fas fa-user", "fas fa-landmark", "fas fa-football-ball", "fas fa-dove"
+];
+
+function getRandomElement(array) {
+    return array[Math.floor(Math.random() * array.length)];
+}
+
+function createCanvasWithLink(id, width, height) {
+    const text = getRandomElement(texts);
+    const link = getRandomElement(links);
+    const logoURL = getRandomElement(faIcons);
+
+    const a = document.createElement('a');
+    a.href = link;
+    a.target = "_blank";
+    a.dataset.title = text;
+
+    const logo = new Image();
+    logo.src = logoURL;
+    logo.classList.add('logo');
+
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+
+    a.appendChild(canvas);
+    a.appendChild(logo);
+    return a;
+}
+
+
+function loadAndDrawImage() {
+    const img = document.getElementById('sourceImage');
+
+    
+    img.style.transition = 'slideshow__img--fadeout';
+    img.style.opacity = 0;
+
+    setTimeout(() => {
+        
+        img.src = imageUrls[currentImageUrlIndex];
+        currentImageUrlIndex = (currentImageUrlIndex + 1) % imageUrls.length;
+
+      
+        img.onload = () => {
+            drawOnCanvases(img); 
+            img.style.opacity = 1; 
+        };
+    }, 3000); 
+}
+
+
+
+
+
+
+
+
+function drawOnCanvases(img) {
+    const container = document.getElementById('canvasContainer');
+    container.innerHTML = ''; 
+    const numRows = 4;
+    const numCols = 4;
+    const blockWidth = 100;
+    const blockHeight = 100;
+
+    for (let row = 0; row < numRows; row++) {
+        for (let col = 0; col < numCols; col++) {
+            const canvasLinkElement = createCanvasWithLink(`canvas${row * numCols + col}`, blockWidth, blockHeight);
+            container.appendChild(canvasLinkElement);
+            const canvas = canvasLinkElement.querySelector('canvas');
+            const ctx = canvas.getContext('2d');
+            const x = col * (img.width / numCols);
+            const y = row * (img.height / numRows);
+            ctx.drawImage(img, x, y, img.width / numCols, img.height / numRows, 0, 0, blockWidth, blockHeight);
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.getElementById('contentContainer');
+    
+    texts.forEach((text, index) => {
+        const block = document.createElement('div');
+        block.className = 'block';
+        
+        const faIcon = faIcons[index]; 
+        const link = links[index];
+        
+        block.innerHTML = `
+            <i class="${faIcon}"></i>
+            <h3>${text}</h3>
+            <a href="${link}">Learn more</a>
+        `;
+        
+        container.appendChild(block);
+    });
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const imageUrl = 'https://placedog.net/400/400?random';
+    const parts = 3;
+    const container = document.getElementById('imagePartContainer');
+
+    const image = new Image();
+    image.src = imageUrl;
+    image.onload = function() {
+        const width = this.width / parts; 
+        const height = this.height;
+
+        for (let i = 0; i < parts; i++) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            canvas.width = width;
+            canvas.height = height;
+
+            
+            ctx.drawImage(image, i * width, 0, width, height, 0, 0, width, height);
+
+            
+            container.appendChild(canvas);
+        }
+    };
+
+    
+    window.addEventListener('scroll', () => {
+        const maxGap = 100; 
+        const scrollFraction = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+        const gap = Math.max(maxGap - scrollFraction * maxGap * 2, 0); 
+        container.style.gap = `${gap}px`; 
+
+       
+        if (gap === 0) {
+            window.removeEventListener('scroll', this);
+        }
+    });
+});
+
+loadAndDrawImage();
+
+
+setInterval(loadAndDrawImage, 3000);
+
+</script>
+
+</body>
+</html>

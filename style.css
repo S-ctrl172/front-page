@@ -1,0 +1,121 @@
+
+.canvas-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px; 
+}
+
+a {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    height: 100px;
+    transition: transform 0.2s; 
+}
+
+a:hover {
+    transform: scale(1.1); 
+}
+
+a:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 10px); 
+    background: rgba(0,0,0,0.7);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    padding-bottom: 10px; 
+    font-size: 14px;
+    z-index: 2;  
+}
+
+a:hover .logo, #sourceImage {
+    opacity: 1; 
+}
+
+.logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 50%; 
+    max-height: 50%;
+    z-index: 0;
+    opacity: 0; 
+    transition: opacity 0.2s; 
+}
+
+canvas {
+    width: 100px;
+    height: 100px;
+}
+
+.block-link {
+    position: relative;
+    display: block;
+    width: 100px; 
+    height: 100px; 
+    text-decoration: none; 
+}
+
+.text-overlay {
+    position: absolute;
+    width: 100%;
+    bottom: -20px; 
+    left: 0;
+    text-align: center;
+    transition: bottom 0.3s; 
+    color: #fff; 
+}
+
+.block-link:hover .text-overlay {
+    bottom: 10px; 
+}
+
+.images-row, #headerImageContainer {
+    width: calc(100% - 40px); 
+    padding: 20px; 
+    display: flex;
+    justify-content: center; 
+    margin-top: 20px; 
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+#headerImage, #canvasContainer img, #headerImageContainer img {
+    max-width: 100%; 
+    height: auto; 
+    display: block; 
+    margin: 0 auto; 
+}
+
+#sourceImage {
+    transition: opacity 1s ease-in-out;
+    opacity: 0; 
+}
+.image-part-container {
+    display: flex;
+    justify-content: center;
+    gap: 100px; 
+    padding: 20px;
+    transition: gap 0.5s ease-out; 
+}
+
+.content-section {
+    height: 100vh; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 0px;
+}
+.block i {
+    font-size: 24px; 
+    margin-bottom: 10px;
+    display: block;
+}
